@@ -1,10 +1,7 @@
-from dependency_injector.providers import Provider
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI
 
-from .infra.persistence.database import Database
 from .interfaces import user_controller, auth_controller, redis_controller
 from .interfaces.something import something
-from dependency_injector.wiring import inject, Provide
 from webapp.main.interfaces.something import router
 from .containers import Container
 

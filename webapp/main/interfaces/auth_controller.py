@@ -1,34 +1,28 @@
-from datetime import timedelta, datetime
-from typing import Union
+from datetime import timedelta
 
 from fastapi import APIRouter, Depends, HTTPException
-from fastapi_utils.cbv import cbv
 from dependency_injector.wiring import inject, Provide
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from fastapi import status
 from jose import jwt, JWTError
-from pydantic import BaseModel
 
 from webapp.main.buiseness.auth_service import AuthService
-from webapp.main.buiseness.user_service import UserService
 from webapp.main.containers import Container
 from webapp.main.domain.dto.token import TokenData, Token
 from webapp.main.domain.dto.user import UserDTO
-from webapp.main.domain.models import User
-from webapp.main.infra.utils.jwt import JwtUtil
+from webapp.main.infra.persistence.user_repository import UserRepository
 
-router = APIRouter()
+router = APIRouter() # APIRouter()
 SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 
-# auth_service = Depends(Provide[Container.auth_service])
-users_repo = Depends(Provide[Container.users_repository])
-oauth2_scheme = Depends(OAuth2PasswordBearer(tokenUrl="token"))
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
-async def get_current_user(self, token: str = oauth2_scheme):
+@inject
+async def get_current_user(token: str = Depends(oauth2_scheme), users_repo: UserRepository = Depends(Provide[Container.users_repository])):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -42,28 +36,27 @@ async def get_current_user(self, token: str = oauth2_scheme):
         token_data = TokenData(username=username)
     except JWTError:
         raise credentials_exception
-    user = self.users_repo.get_by_username()
+    user = users_repo.get_by_username(username)
     if user is None:
         raise credentials_exception
-    return user
+
+    user_dto = UserDTO(username=user.username, email=user.email, hashed_password=user.hashed_password, is_active=user.is_active)
+    return user_dto
 
 
 async def get_current_active_user(current_user: UserDTO = Depends(get_current_user)):
-    if current_user.is_active:
+    if not current_user.is_active:
         raise HTTPException(status_code=400, detail="Inactive user")
-    return current_user
+    else:
+        return current_user
 
-
-class Test(BaseModel):
-    username: str
-    password: str
 
 @router.post("/token", response_model=Token)
 @inject
 async def login(
         form_data: OAuth2PasswordRequestForm = Depends(),
         auth_service: AuthService = Depends(Provide[Container.auth_service]),
-        jwt_util=Depends(JwtUtil)
+        jwt_util=Depends(Provide[Container.jwt_util])
 ):
     user = auth_service.authenticate_user(form_data.username, form_data.password)
     if not user:
@@ -79,11 +72,11 @@ async def login(
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-@router.get("/users/me/")
-async def read_users_me(current_user: UserDTO = Depends(get_current_active_user)):
+@router.get("/users/token/me")
+async def read_users_me(current_user: UserDTO = Depends(get_current_active_user)) -> UserDTO:
     return current_user
 
 
-# @router.get("/users/me/items/", response_model=None)
-# async def read_own_items(current_user: UserDTO = Depends(get_current_active_user)) -> list:
-#     return [{"item_id": "Foo", "owner": current_user.username}]
+@router.get("/users/me/items", response_model=None)
+async def read_own_items(current_user: UserDTO = Depends(get_current_active_user)) -> list:
+    return [{"item_id": "Foo", "owner": current_user.username}]

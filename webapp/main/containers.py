@@ -42,8 +42,3 @@ class Container(containers.DeclarativeContainer):
     jwt_util = providers.Factory(
         jwt.JwtUtil,
     )
-
-    oauth2_scheme = providers.Factory(
-        OAuth2PasswordBearer,
-        tokenUrl="/token"
-    )
