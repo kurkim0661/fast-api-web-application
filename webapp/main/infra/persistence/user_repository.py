@@ -1,9 +1,9 @@
-from webapp.main.domain.models import User
+from webapp.main.domain.user import User
+
 # from sqlalchemy.orm import Session
 
 
 class UserRepository:
-
     def __init__(self, create_table, session_factory):
         self.create_table = create_table
         self.session_factory = session_factory

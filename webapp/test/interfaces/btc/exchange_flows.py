@@ -7,7 +7,5 @@ from . import router
 
 @router.get("/exchange-flows")
 @inject
-def root(
-        user_service: UserService = Depends(Provide[Container.user_service])
-):
+def root(user_service: UserService = Depends(Provide[Container.user_service])):
     return user_service.get_users()

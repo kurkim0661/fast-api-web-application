@@ -12,10 +12,7 @@ def create_app():
     container.config.redis_host.from_env("REDIS_HOST", "localhost")
     container.config.redis_password.from_env("REDIS_PASSWORD", "password")
 
-    container.wire(modules=[user_controller,
-                            auth_controller,
-                            something,
-                            __name__])
+    container.wire(modules=[user_controller, auth_controller, something, __name__])
     container.wire(modules=[something])
 
     fastapi_app = FastAPI(openapi_prefix="/vi")
@@ -34,4 +31,3 @@ app, container = create_app()
 @app.get(app.root_path + "/openapi.json")
 def custom_swagger_ui_html():
     return app.openapi()
-

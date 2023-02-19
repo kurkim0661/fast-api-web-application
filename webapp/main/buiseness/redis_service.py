@@ -33,4 +33,3 @@ class Service:
                 return pickle.loads(res)
 
         return None
-

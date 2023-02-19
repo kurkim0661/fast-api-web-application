@@ -15,7 +15,9 @@ class User(Base):
     is_active = Column(Boolean, default=True)
 
     def __repr__(self):
-        return "<User(id='%s', email='%s', \
+        return (
+            "<User(id='%s', email='%s', \
                 hashed_password='%s', \
-                is_active='%s')>" % (
-            self.id, self.email, self.hashed_password, self.is_active)
+                is_active='%s')>"
+            % (self.id, self.email, self.hashed_password, self.is_active)
+        )

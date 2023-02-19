@@ -23,4 +23,3 @@ class UserService:
     def create_user(self, username, email, password):
         hashed_password = self.get_password_hash(password)
         return self.users_repo.add_user(username, email, hashed_password)
-

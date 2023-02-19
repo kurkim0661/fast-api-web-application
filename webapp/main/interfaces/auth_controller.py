@@ -12,7 +12,7 @@ from webapp.main.domain.dto.token import TokenData, Token
 from webapp.main.domain.dto.user import UserDTO
 from webapp.main.infra.persistence.user_repository import UserRepository
 
-router = APIRouter() # APIRouter()
+router = APIRouter()  # APIRouter()
 SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
@@ -53,11 +53,7 @@ async def get_current_active_user(current_user: UserDTO = Depends(get_current_us
 
 @router.post("/token", response_model=Token)
 @inject
-async def login(
-        form_data: OAuth2PasswordRequestForm = Depends(),
-        auth_service: AuthService = Depends(Provide[Container.auth_service]),
-        jwt_util=Depends(Provide[Container.jwt_util])
-):
+async def login(form_data: OAuth2PasswordRequestForm = Depends(), auth_service: AuthService = Depends(Provide[Container.auth_service]), jwt_util=Depends(Provide[Container.jwt_util])):
     user = auth_service.authenticate_user(form_data.username, form_data.password)
     if not user:
         raise HTTPException(
@@ -66,9 +62,7 @@ async def login(
             headers={"WWW-Authenticate": "Bearer"},
         )
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = jwt_util.create_access_token(
-        data={"sub": user.username}, expires_delta=access_token_expires
-    )
+    access_token = jwt_util.create_access_token(data={"sub": user.username}, expires_delta=access_token_expires)
     return {"access_token": access_token, "token_type": "bearer"}
 
 

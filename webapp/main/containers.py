@@ -15,18 +15,11 @@ class Container(containers.DeclarativeContainer):
 
     db = providers.Singleton(Database, db_url=config.db.url)
 
-    users_repository = providers.Factory(
-        UserRepository,
-        create_table=db.provided.create_table,
-        session_factory=db.provided.session)
+    users_repository = providers.Factory(UserRepository, create_table=db.provided.create_table, session_factory=db.provided.session)
 
-    user_service = providers.Factory(
-        UserService,
-        users_repository=users_repository)
+    user_service = providers.Factory(UserService, users_repository=users_repository)
 
-    auth_service = providers.Factory(
-        AuthService,
-        users_repository=users_repository)
+    auth_service = providers.Factory(AuthService, users_repository=users_repository)
 
     redis_pool = providers.Resource(
         redis.init_redis_pool,

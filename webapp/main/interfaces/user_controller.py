@@ -13,9 +13,7 @@ router = APIRouter()
 
 @router.get("/users")
 @inject
-def root(
-        user_service: UserService = Depends(Provide[Container.user_service])
-):
+def root(user_service: UserService = Depends(Provide[Container.user_service])):
     return user_service.get_users()
 
 
@@ -26,9 +24,7 @@ def test():
 
 @router.get("/users/{id}")
 @inject
-def get_by_id(id: int,
-              user_service: UserService =
-              Depends(Provide[Container.user_service])):
+def get_by_id(id: int, user_service: UserService = Depends(Provide[Container.user_service])):
     return user_service.user_by_id(id)
 
 
@@ -41,7 +37,5 @@ def add(user: UserDTO, user_service: UserService = Depends(Provide[Container.use
 
 @router.get("/users/remove/{id}")
 @inject
-def remove(id: int,
-           user_repository: UserRepository =
-           Depends(Provide[Container.users_repository])):
+def remove(id: int, user_repository: UserRepository = Depends(Provide[Container.users_repository])):
     return user_repository.delete_by_id(id)

@@ -1,0 +1,27 @@
+[flake8]
+    ignore = H404, H405, F401, E402, E203, E741
+    max-line-length = 200
+    exclude =
+        .git,
+        .gitignore,
+        *.pot,
+        *.py[co],
+        __pycache__,
+        venv,
+        .env,
+        __pycache__*,
+        src/,
+        .vscode*,
+        .idea,
+        .DS_Store,
+        *~,
+        env/*,
+        venv/*,
+        myvenv/*,
+        .elasticbeanstalk/*,
+        !.elasticbeanstalk/*.cfg.yml,
+        !.elasticbeanstalk/*.global.yml,
+        .coverage,
+        htmlcov,
+        logs/*,
+        *.log,
