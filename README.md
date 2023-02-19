@@ -1,4 +1,5 @@
-# FastAPI_DI_SqlAlchemy
-Пример внедрения зависимостей в приложение FastAPI и SqlAlchemy. Библиотека dependency_injector
+# FastApi Playground
+FastApi docs 를 보며 다양한 기능들을 테스트 해보는 playground
 
-Для запуска ```> python main.py```
+# How to start?
+python3 main.py
