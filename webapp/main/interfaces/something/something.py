@@ -1,7 +1,7 @@
 from fastapi import Depends
 from dependency_injector.wiring import inject, Provide
 from webapp.main.containers import Container
-from webapp.main.buiseness.user_service import UserService
+from webapp.main.business.user_service import UserService
 from . import router
 
 

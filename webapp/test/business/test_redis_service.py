@@ -5,9 +5,8 @@ from unittest import mock
 import pytest
 from httpx import AsyncClient
 
-from webapp.main.application import app, container
-from webapp.main.containers import Container
-from webapp.main.buiseness import redis_service
+from webapp.main.application import app
+from webapp.main.business import redis_service
 
 
 @pytest.fixture
@@ -19,11 +18,10 @@ def client(event_loop):
 
 @pytest.mark.asyncio
 async def test_index(client):
-    service_mock = mock.AsyncMock(spec=redis_service.Service)
+    service_mock = mock.AsyncMock(spec=redis_service.RedisService)
     service_mock.process.return_value = "Foo"
-
-    with container.redis_service.override(service_mock):
-        response = await client.get("/")
+    with app.container.redis_service.override(service_mock):
+        response = await client.get("/redis")
 
     assert response.status_code == 200
     assert response.json() == {"result": "Foo"}

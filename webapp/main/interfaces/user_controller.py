@@ -4,7 +4,7 @@ from dependency_injector.wiring import inject, Provide
 from fastapi.openapi.models import Response
 
 from webapp.main.containers import Container
-from webapp.main.buiseness.user_service import UserService
+from webapp.main.business.user_service import UserService
 from webapp.main.domain.dto.user import UserDTO
 from webapp.main.infra.persistence.user_repository import UserRepository
 

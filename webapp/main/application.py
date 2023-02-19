@@ -1,10 +1,9 @@
 from fastapi import FastAPI
 
 from .interfaces import user_controller, auth_controller, redis_controller
-from .interfaces.something import something
 from webapp.main.interfaces.something import router
 from .containers import Container
-
+from webapp import main
 
 def create_app():
     container = Container()
@@ -12,8 +11,9 @@ def create_app():
     container.config.redis_host.from_env("REDIS_HOST", "localhost")
     container.config.redis_password.from_env("REDIS_PASSWORD", "password")
 
-    container.wire(modules=[user_controller, auth_controller, something, __name__])
-    container.wire(modules=[something])
+    container.wire(
+        packages=[main],
+    )
 
     fastapi_app = FastAPI(openapi_prefix="/vi")
     fastapi_app.container = container

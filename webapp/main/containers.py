@@ -3,10 +3,10 @@ from fastapi.security import OAuth2PasswordBearer
 
 from webapp.main.infra.persistence.database import Database
 from webapp.main.infra.persistence.user_repository import UserRepository
-from webapp.main.buiseness.user_service import UserService
-from .buiseness.auth_service import AuthService
+from webapp.main.business.user_service import UserService
+from .business.auth_service import AuthService
 from .infra import redis
-from .buiseness import redis_service
+from .business import redis_service
 from .infra.utils import jwt
 
 
@@ -28,7 +28,7 @@ class Container(containers.DeclarativeContainer):
     )
 
     redis_service = providers.Factory(
-        redis_service.Service,
+        redis_service.RedisService,
         redis=redis_pool,
     )
 

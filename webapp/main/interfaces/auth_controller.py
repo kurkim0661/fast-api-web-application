@@ -6,7 +6,7 @@ from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from fastapi import status
 from jose import jwt, JWTError
 
-from webapp.main.buiseness.auth_service import AuthService
+from webapp.main.business.auth_service import AuthService
 from webapp.main.containers import Container
 from webapp.main.domain.dto.token import TokenData, Token
 from webapp.main.domain.dto.user import UserDTO

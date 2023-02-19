@@ -4,7 +4,7 @@ from typing import Dict, List, Optional, Any
 import pickle
 
 
-class Service:
+class RedisService:
     def __init__(self, redis: Redis) -> None:
         self._redis = redis
 
